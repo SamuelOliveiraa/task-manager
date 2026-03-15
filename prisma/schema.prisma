@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String
+
+  role          Role @default(member)
+  teams         TeamMembers[]
+  tasks         Tasks[]
+  tasks_history  TasksHistory[]
+
+  emailVerified Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+enum Role {
+  member
+  admin
+}
+
+model Teams {
+  id        String    @id @default(uuid())
+  name      String
+  description String?
+
+  members   TeamMembers[]
+  tasks         Tasks[]
+
+  @@map("teams")
+}
+
+model TeamMembers{
+  id        String    @id @default(uuid())
+
+  team_id   String
+  user_id   String
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  team      Teams    @relation(fields: [team_id], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  @@map("teams_members")
+}
+
+model Tasks{
+  id            String    @id @default(uuid())
+  title         String
+  description   String?
+  status        Status   @default(pending)
+  priority      Priority @default(low)
+
+  team          Teams    @relation(fields: [team_id], references: [id], onDelete: Cascade)
+  team_id       String
+
+  user          User     @relation(fields: [assigned_to], references: [id], onDelete: Cascade)
+  assigned_to   String
+
+  tasks_history  TasksHistory[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  @@map("tasks")
+}
+
+enum Status {
+  pending
+  in_progress
+  completed
+}
+
+enum Priority {
+  high
+  medium
+  low
+}
+
+model TasksHistory{
+  id            String    @id @default(uuid())
+  old_status        Status
+  new_status        Status
+
+  task          Tasks    @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  task_id       String
+
+  user          User     @relation(fields: [changed_by], references: [id], onDelete: Cascade)
+  changed_by   String
+
+  changedAt     DateTime @updatedAt
+  @@map("tasks_history")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
