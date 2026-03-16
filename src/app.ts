@@ -1,10 +1,17 @@
 import fastify from "fastify";
 import { auth } from "./lib/auth.ts";
 import fastifyCors from "@fastify/cors";
-import routes from "./routes/index.ts";
 import { env } from "./env/index.ts";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUi from "@fastify/swagger-ui";
+import {
+  validatorCompiler,
+  serializerCompiler,
+  type ZodTypeProvider
+} from "fastify-type-provider-zod";
+import routes from "./routes/index.ts";
 
-const app = fastify({ logger: true });
+const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
 
 // Configure CORS policies
 app.register(fastifyCors, {
@@ -15,6 +22,25 @@ app.register(fastifyCors, {
   maxAge: 86400
 });
 
+app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: "Task Manager",
+      description: "",
+      version: "1.0.0"
+    }
+  }
+});
+
+// Register the swagger UI plugin
+app.register(fastifySwaggerUi, {
+  routePrefix: "/docs"
+});
+
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
+
+// Configure Better Auth
 app.route({
   method: ["GET", "POST"],
   url: "/api/auth/*",
@@ -52,6 +78,6 @@ app.route({
 
 app.register(routes);
 
-app.listen({ port: 3333 }, () => {
+app.listen({ port: env.PORT, host: "0.0.0.0" }, () => {
   console.log("Server is running on port 3333");
 });

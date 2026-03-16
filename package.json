@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "dev": "npx tsx watch src/app.ts"
+    "dev": "tsx --watch src/app.ts"
   },
   "keywords": [],
   "author": "Samuel Oliveira",
@@ -12,16 +12,20 @@
   "type": "module",
   "dependencies": {
     "@fastify/cors": "^11.2.0",
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^5.2.5",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
     "better-auth": "^1.5.5",
     "dotenv": "^17.3.1",
     "fastify": "^5.8.2",
+    "fastify-type-provider-zod": "^6.1.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
     "prisma": "^7.5.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

@@ -13,7 +13,7 @@ export class UsersController {
     try {
       const users = await this.#model.index();
 
-      return reply.send({ users });
+      return reply.send({ message: "Users is ok", users: users });
     } catch (error) {
       if (env.NODE_ENV === "dev") {
         console.log(error);

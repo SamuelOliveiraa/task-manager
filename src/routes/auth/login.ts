@@ -1,29 +1,21 @@
+import type { AuthController } from "@/controllers/AuthControllers.ts";
 import type { FastifyInstance } from "fastify";
 import z from "zod";
 
 export const loginRoute = async (
   app: FastifyInstance,
-  controller: 
+  controller: AuthController
 ) => {
-  app.get(
-    "",
+  app.post(
+    "/login",
     {
       schema: {
         tags: ["auth"],
         summary: "Login",
-        description:
-          "",
+        description: "a",
         response: {
           200: z.object({
-            users: z
-              .array(
-                z.object({
-                  id: z.string(),
-                  name: z.string().min(2).max(100),
-                  email: z.email()
-                })
-              )
-              .describe("Gives an array of users")
+            message: z.string()
           }),
           404: z
             .object({
@@ -37,9 +29,13 @@ export const loginRoute = async (
               code: z.any().optional()
             })
             .describe("Returned when an unexpected server error occurs")
-        }
+        },
+        body: z.object({
+          email: z.email(),
+          password: z.string().min(6)
+        })
       }
     },
-    controller.index
+    controller.login
   );
 };

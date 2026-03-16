@@ -7,7 +7,7 @@ export const getUsersRoute = async (
   controller: UsersController
 ) => {
   app.get(
-    "",
+    "/",
     {
       schema: {
         tags: ["users"],
@@ -16,6 +16,7 @@ export const getUsersRoute = async (
           "This route gets all users from the users table on the database.",
         response: {
           200: z.object({
+            message: z.string(),
             users: z
               .array(
                 z.object({
