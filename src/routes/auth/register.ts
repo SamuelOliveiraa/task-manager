@@ -12,7 +12,7 @@ export const registerRoute = async (
       schema: {
         tags: ["auth"],
         summary: "Register",
-        description: "a",
+        description: "This route registers a new user to database.",
         response: {
           200: z.object({
             message: z.string()

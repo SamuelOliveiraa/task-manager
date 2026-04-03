@@ -5,6 +5,8 @@ export async function authenticated(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
+  console.log("Cookies recebidos:", request.headers.cookies);
+
   const session = await auth.api.getSession({
     headers: request.headers as Record<string, string>
   });

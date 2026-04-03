@@ -12,7 +12,8 @@ export const loginRoute = async (
       schema: {
         tags: ["auth"],
         summary: "Login",
-        description: "a",
+        description:
+          "This route allows users to log in by providing their email and password.",
         response: {
           200: z.object({
             message: z.string()

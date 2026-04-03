@@ -8,7 +8,7 @@ export class AuthModel {
       asResponse: true
     });
 
-    if (!responseAuth) {
+    if (responseAuth.statusText === "UNAUTHORIZED") {
       return null;
     }
 
@@ -22,7 +22,7 @@ export class AuthModel {
       }
     });
 
-    if (!userExists) {
+    if (userExists) {
       return null;
     }
 

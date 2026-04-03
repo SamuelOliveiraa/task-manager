@@ -1,5 +1,4 @@
 import { env } from "@/env/index.ts";
-import { auth } from "@/lib/auth.ts";
 import { AuthModel } from "@/models/AuthModel.ts";
 import type { FastifyReply, FastifyRequest } from "fastify";
 
@@ -21,8 +20,10 @@ export class AuthController {
   ) => {
     try {
       const { email, password } = request.body;
+
       const response = await this.#model.login(email, password);
-      if (!response) {
+
+      if (response === null) {
         return reply.status(404).send({
           message: "E-mail or password is incorrect"
         });
@@ -54,14 +55,14 @@ export class AuthController {
       const { name, email, password } = request.body;
       const response = await this.#model.register(name, email, password);
 
-      if (!response?.token) {
+      if (!response) {
         return reply.status(404).send({
           message: "E-mail is already in use"
         });
       }
 
       return reply.status(201).send({
-        message: "User Created in successfully"
+        message: "User created successfully"
       });
     } catch (error) {
       if (env.NODE_ENV === "dev") {

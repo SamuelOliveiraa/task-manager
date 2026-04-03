@@ -5,7 +5,7 @@ const userSchema = z.object({
     name: z.string(),
     email: z.email(),
     role: z.enum(['member', 'admin']),
-    teams: z.array(),
+    // teams: z.array(),
 
     emailVerified: z.boolean(),
     createdAt: z.date(),
@@ -23,7 +23,6 @@ const userSchema = z.object({
 
 const teamsSchema = z.object({
     id: z.uuid(),
-    name: z.    
 })
 
 

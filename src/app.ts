@@ -7,11 +7,15 @@ import fastifySwaggerUi from "@fastify/swagger-ui";
 import {
   validatorCompiler,
   serializerCompiler,
-  type ZodTypeProvider
+  type ZodTypeProvider,
+  jsonSchemaTransform
 } from "fastify-type-provider-zod";
 import routes from "./routes/index.ts";
+import fastifyCookie from "@fastify/cookie";
 
-const app = fastify({ logger: true }).withTypeProvider<ZodTypeProvider>();
+export const app = fastify({
+  logger: true
+}).withTypeProvider<ZodTypeProvider>();
 
 // Configure CORS policies
 app.register(fastifyCors, {
@@ -29,7 +33,12 @@ app.register(fastifySwagger, {
       description: "",
       version: "1.0.0"
     }
-  }
+  },
+  transform: jsonSchemaTransform
+});
+
+app.register(fastifyCookie, {
+  secret: env.BETTER_AUTH_SECRET
 });
 
 // Register the swagger UI plugin
@@ -77,7 +86,3 @@ app.route({
 });
 
 app.register(routes);
-
-app.listen({ port: env.PORT, host: "0.0.0.0" }, () => {
-  console.log("Server is running on port 3333");
-});
