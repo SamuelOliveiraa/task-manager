@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "dev": "tsx --watch src/server.ts"
+    "dev": "tsx --watch src/server.ts",
+    "db:setup": "prisma migrate dev && prisma generate && prisma db seed"
   },
   "keywords": [],
   "author": "Samuel Oliveira",

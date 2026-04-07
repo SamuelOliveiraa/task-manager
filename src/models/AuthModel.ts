@@ -27,7 +27,7 @@ export class AuthModel {
     }
 
     const responseAuth = await auth.api.signUpEmail({
-      body: { name, email, password },
+      body: { name, email, password, role: "admin" },
       asResponse: true
     });
 

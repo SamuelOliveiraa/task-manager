@@ -11,5 +11,14 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true
   },
-  trustedOrigins: ["http://localhost:3333"]
+  trustedOrigins: ["http://localhost:3333"],
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        required: false,
+        defaultValue: "member"
+      }
+    }
+  }
 });

@@ -12,7 +12,6 @@ export class UsersController {
   index = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const users = await this.#model.index();
-
       return reply.send({ message: "Users is ok", users: users });
     } catch (error) {
       if (env.NODE_ENV === "dev") {

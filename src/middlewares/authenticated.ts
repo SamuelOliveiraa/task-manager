@@ -5,14 +5,12 @@ export async function authenticated(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  console.log("Cookies recebidos:", request.headers.cookies);
-
   const session = await auth.api.getSession({
-    headers: request.headers as Record<string, string>
+    headers: request.headers as HeadersInit
   });
 
   if (!session) {
-    return reply.status(401).send({ message: "Unauthorized" });
+    return reply.status(401).send({ message: "Session not found or expired" });
   }
 
   request.user = session.user;

@@ -1,27 +1,31 @@
-import type { AuthController } from "@/controllers/AuthControllers.ts";
+import type { TeamsController } from "@/controllers/TeamsController.ts";
 import type { FastifyInstance } from "fastify";
 import z from "zod";
 
-export const loginRoute = async (
+export const getTeamsRoute = async (
   app: FastifyInstance,
-  controller: AuthController
+  controller: TeamsController
 ) => {
-  app.post(
-    "/login",
+  app.get(
+    "/",
     {
       schema: {
-        tags: ["auth"],
-        summary: "Login",
+        tags: ["teams"],
+        summary: "Get all teams",
         description:
-          "This route allows users to log in by providing their email and password.",
+          "This route gets all teams from the teams table on the database.",
         response: {
           200: z.object({
             message: z.string(),
-            user: z.object({
-              id: z.uuid(),
-              name: z.string(),
-              email: z.email()
-            })
+            teams: z
+              .array(
+                z.object({
+                  id: z.string(),
+                  name: z.string().min(2).max(100),
+                  description: z.string()
+                })
+              )
+              .describe("Gives an array of teams")
           }),
           404: z
             .object({
@@ -35,13 +39,9 @@ export const loginRoute = async (
               code: z.any().optional()
             })
             .describe("Returned when an unexpected server error occurs")
-        },
-        body: z.object({
-          email: z.email(),
-          password: z.string().min(6)
-        })
+        }
       }
     },
-    controller.login
+    controller.index
   );
 };
