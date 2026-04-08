@@ -1,3 +1,4 @@
+import type { TeamsMembersController } from "@/controllers/TeamsMembersController.ts";
 import type { FastifyInstance } from "fastify";
 import z from "zod";
 
@@ -9,12 +10,14 @@ export const deleteTeamMemberRoute = async (
     "/:team_id/:user_id",
     {
       schema: {
-        tags: ["teams"],
+        tags: ["teams_members"],
         summary: "Deletes the user from a specific team",
         description:
           "This route deletes the user from a specific team on the teams table on the database.",
         response: {
-          204: z.null().describe("Returned when the user was successfully deleted of the team."),
+          204: z
+            .null()
+            .describe("Returned when the team member is successfully deleted"),
           404: z
             .object({
               message: z.string(),
@@ -28,10 +31,10 @@ export const deleteTeamMemberRoute = async (
             })
             .describe("Returned when an unexpected server error occurs")
         },
-        params: {
-            team_id: z.uuid(),
-            user_id: z.uuid()
-        } 
+        params: z.object({
+          team_id: z.uuid(),
+          user_id: z.string()
+        })
       }
     },
     controller.delete

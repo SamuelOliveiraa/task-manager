@@ -9,20 +9,7 @@ export class TeamsMembersController {
     this.#model = new TeamsMembersModel();
   }
 
-  // Read all teams
-  // index = async (_: FastifyRequest, reply: FastifyReply) => {
-  //   try {
-  //     const teams = await this.#model.index();
-  //     return reply.send({ message: "Teams is ok", teams: teams });
-  //   } catch (error) {
-  //     if (env.NODE_ENV === "dev") {
-  //       console.log(error);
-  //     }
-  //     throw error;
-  //   }
-  // };
-
-  // Create a new
+  // Add a new team member to a team
   store = async (
     request: FastifyRequest<{
       Params: {
@@ -38,16 +25,16 @@ export class TeamsMembersController {
       if (!team_id || !user_id) {
         return reply
           .status(400)
-          .send({ message: "User ID and Team ID are required" });
+          .send({ message: "Team Or Member was not found" });
       }
 
-      const team = await this.#model.create()
+      const teamMemberCreated = await this.#model.create(team_id, user_id);
 
-      if (!team) {
-        return reply.status(500).send({ message: "Failed to create team" });
+      if (!teamMemberCreated) {
+        return reply.status(500).send({ message: "Failed to add team member" });
       }
 
-      return reply.send({ message: "Team created successfully" });
+      return reply.send({ message: "Team member added successfully" });
     } catch (error) {
       if (env.NODE_ENV === "dev") {
         console.log(error);
@@ -56,30 +43,34 @@ export class TeamsMembersController {
     }
   };
 
-  // Delete a 
-  delete = async (request: FastifyRequest<{Params: {team_id: string}}>, reply: FastifyReply) => {
-    try{
-      const {team_id} = request.params
+  // Delete a team member of a team
+  delete = async (
+    request: FastifyRequest<{ Params: { team_id: string; user_id: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { team_id, user_id } = request.params;
 
-      if (!team_id) {
+      if (!team_id || !user_id) {
         return reply
           .status(400)
-          .send({ message: "Team was not found" });
-      }
-      
-      const team = await this.#model.
-
-      if(!team){
-        return reply.status(500).send({ message: "Failed to delete a team" });
+          .send({ message: "Team Or Member was not found" });
       }
 
-      return reply.status(204)
+      const teamMember = await this.#model.delete(team_id, user_id);
 
-    }catch(error){
+      if (!teamMember) {
+        return reply
+          .status(500)
+          .send({ message: "Failed to delete a team member" });
+      }
+
+      return reply.status(204).send();
+    } catch (error) {
       if (env.NODE_ENV === "dev") {
         console.log(error);
       }
       throw error;
     }
-  }
+  };
 }

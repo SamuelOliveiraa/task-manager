@@ -57,29 +57,30 @@ export class TeamsController {
   };
 
   // Delete a Team
-  delete = async (request: FastifyRequest<{Params: {team_id: string}}>, reply: FastifyReply) => {
-    try{
-      const {team_id} = request.params
+  delete = async (
+    request: FastifyRequest<{ Params: { team_id: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { team_id } = request.params;
+      console.log(team_id);
 
       if (!team_id) {
-        return reply
-          .status(400)
-          .send({ message: "Team was not found" });
+        return reply.status(400).send({ message: "Team was not found" });
       }
-      
-      const team = await this.#model.delete(team_id)
 
-      if(!team){
+      const team = await this.#model.delete(team_id);
+
+      if (!team) {
         return reply.status(500).send({ message: "Failed to delete a team" });
       }
 
-      return reply.status(204)
-
-    }catch(error){
+      return reply.status(204).send();
+    } catch (error) {
       if (env.NODE_ENV === "dev") {
         console.log(error);
       }
       throw error;
     }
-  }
+  };
 }

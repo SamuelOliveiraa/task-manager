@@ -15,26 +15,22 @@ export class TeamsMembersModel {
   }
 
   async delete(team_id: string, user_id: string) {
-    const teamMember = await prisma.teamMembers.findFirst({
+    const teamMemberSelected = await prisma.teamMembers.findFirst({
       where: {
-        AND: [
-            {team_id},
-            {user_id}
-        ]
+        AND: [{ team_id }, { user_id }]
       }
-    })
+    });
 
-    if(!teamMember) return null
+    if (!teamMemberSelected) return null;
 
-    const userDeleted = await prisma.teamMembers.delete({
-        where: {
-            id: teamMember?.id,
-        }
-    })
+    const memberDeleted = await prisma.teamMembers.delete({
+      where: {
+        id: teamMemberSelected?.id
+      }
+    });
 
-    if (!userDeleted) return null;
+    if (!memberDeleted) return null;
 
-    return userDeleted;
+    return memberDeleted;
   }
-
 }

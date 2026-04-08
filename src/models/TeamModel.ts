@@ -24,7 +24,9 @@ export class TeamModel {
       where: {
         id: team_id
       }
-    })
+    });
+
+    console.log("Model: ", teamDeleted);
 
     if (!teamDeleted) return null;
 

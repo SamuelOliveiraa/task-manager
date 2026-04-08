@@ -15,7 +15,9 @@ export const deleteTeamRoute = async (
         description:
           "This route delete a team by ID from the teams table on the database.",
         response: {
-          204: z.null().describe("Returned when the team is successfully deleted"),
+          204: z
+            .null()
+            .describe("Returned when the team is successfully deleted"),
           404: z
             .object({
               message: z.string(),
@@ -29,9 +31,9 @@ export const deleteTeamRoute = async (
             })
             .describe("Returned when an unexpected server error occurs")
         },
-        params: {
-            team_id: z.uuid()
-        } 
+        params: z.object({
+          team_id: z.uuid()
+        })
       }
     },
     controller.delete
