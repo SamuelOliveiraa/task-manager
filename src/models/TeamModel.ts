@@ -18,4 +18,16 @@ export class TeamModel {
 
     return team;
   }
+
+  async delete(team_id: string) {
+    const teamDeleted = await prisma.teams.delete({
+      where: {
+        id: team_id
+      }
+    })
+
+    if (!teamDeleted) return null;
+
+    return teamDeleted;
+  }
 }

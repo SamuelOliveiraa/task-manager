@@ -1,47 +1,47 @@
-import { env } from "@/env/index.ts";
-import { TeamModel } from "@/models/TeamModel.ts";
+import { TeamsMembersModel } from "@/models/TeamsMembersModel.ts";
 import type { FastifyReply, FastifyRequest } from "fastify";
+import { env } from "@/env/index.ts";
 
-export class TeamsController {
-  #model: TeamModel;
+export class TeamsMembersController {
+  #model: TeamsMembersModel;
 
   constructor() {
-    this.#model = new TeamModel();
+    this.#model = new TeamsMembersModel();
   }
 
   // Read all teams
-  index = async (_: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const teams = await this.#model.index();
-      return reply.send({ message: "Teams is ok", teams: teams });
-    } catch (error) {
-      if (env.NODE_ENV === "dev") {
-        console.log(error);
-      }
-      throw error;
-    }
-  };
+  // index = async (_: FastifyRequest, reply: FastifyReply) => {
+  //   try {
+  //     const teams = await this.#model.index();
+  //     return reply.send({ message: "Teams is ok", teams: teams });
+  //   } catch (error) {
+  //     if (env.NODE_ENV === "dev") {
+  //       console.log(error);
+  //     }
+  //     throw error;
+  //   }
+  // };
 
-  // Create a new teams
+  // Create a new
   store = async (
     request: FastifyRequest<{
-      Body: {
-        name: string;
-        description?: string;
+      Params: {
+        team_id: string;
+        user_id: string;
       };
     }>,
     reply: FastifyReply
   ) => {
     try {
-      const { name, description } = request.body;
+      const { team_id, user_id } = request.params;
 
-      if (!name || !description) {
+      if (!team_id || !user_id) {
         return reply
           .status(400)
-          .send({ message: "Name or description are required" });
+          .send({ message: "User ID and Team ID are required" });
       }
 
-      const team = await this.#model.create(name, description);
+      const team = await this.#model.create()
 
       if (!team) {
         return reply.status(500).send({ message: "Failed to create team" });
@@ -56,7 +56,7 @@ export class TeamsController {
     }
   };
 
-  // Delete a Team
+  // Delete a 
   delete = async (request: FastifyRequest<{Params: {team_id: string}}>, reply: FastifyReply) => {
     try{
       const {team_id} = request.params
@@ -67,7 +67,7 @@ export class TeamsController {
           .send({ message: "Team was not found" });
       }
       
-      const team = await this.#model.delete(team_id)
+      const team = await this.#model.
 
       if(!team){
         return reply.status(500).send({ message: "Failed to delete a team" });
