@@ -1,10 +1,10 @@
-import type { TeamsMembersController } from "@/controllers/TeamsMembersController.ts";
+import type { TeamMembersController } from "@/controllers/TeamMembersController.ts";
 import type { FastifyInstance } from "fastify";
 import z from "zod";
 
-export const postTeamsMembersRoute = async (
+export const postTeamMembersRoute = async (
   app: FastifyInstance,
-  controller: TeamsMembersController
+  controller: TeamMembersController
 ) => {
   app.post(
     "/:team_id/:user_id",
