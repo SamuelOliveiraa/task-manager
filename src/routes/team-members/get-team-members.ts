@@ -1,10 +1,10 @@
-import type { TeamsController } from "@/controllers/TeamsController.ts";
+import type { TeamMembersController } from "@/controllers/TeamMembersController.ts";
 import type { FastifyInstance } from "fastify";
-import z, { object } from "zod";
+import z from "zod";
 
-export const getTeamsRoute = async (
+export const getTeamMembersRoute = async (
   app: FastifyInstance,
-  controller: TeamsController
+  controller: TeamMembersController
 ) => {
   app.get(
     "/:team_id",
