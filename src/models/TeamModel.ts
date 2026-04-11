@@ -26,8 +26,6 @@ export class TeamModel {
       }
     });
 
-    console.log("Model: ", teamDeleted);
-
     if (!teamDeleted) return null;
 
     return teamDeleted;

@@ -1,13 +1,12 @@
+import { TasksController } from "@/controllers/TasksController.ts";
 import type { FastifyInstance } from "fastify";
+import { getTasksRoute } from "./get-tasks.ts";
+import { deleteTaskRoute } from "./delete-task.ts";
 
-import { getTeamsRoute } from "./get-teams.ts";
-import { postTeamsRoute } from "./post-teams.ts";
-import { deleteTeamRoute } from "./delete-team.ts";
 
 export default async function tasksRoutes(app: FastifyInstance) {
-  const controller = new TeamsController();
+  const controller = new TasksController();
 
-  await getTeamsRoute(app, controller);
-  await postTeamsRoute(app, controller);
-  await deleteTeamRoute(app, controller);
+  await getTasksRoute(app, controller)
+  await deleteTaskRoute(app, controller)
 }

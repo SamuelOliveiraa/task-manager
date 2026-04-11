@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { AuthController } from "@/controllers/AuthControllers.ts";
+import { AuthController } from "@/controllers/AuthController.ts";
 import { loginRoute } from "./login.ts";
 import { registerRoute } from "./register.ts";
 

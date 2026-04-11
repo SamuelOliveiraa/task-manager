@@ -1,9 +1,10 @@
+import type { TasksController } from "@/controllers/TasksController.ts";
 import type { FastifyInstance } from "fastify";
 import z from "zod";
 
 export const getTasksRoute = async (
   app: FastifyInstance,
-  controller: 
+  controller: TasksController
 ) => {
   app.get(
     "/",
@@ -16,15 +17,27 @@ export const getTasksRoute = async (
         response: {
           200: z.object({
             message: z.string(),
-            teams: z
+            tasks: z
               .array(
                 z.object({
                   id: z.string(),
-                  name: z.string().min(2).max(100),
-                  description: z.string()
+                  title: z.string().min(2).max(100),
+                  description: z.string(),
+                  priority: z.enum(["high", "medium", "low"]),
+                  status: z.enum(["pending", "in_progress", "completed"]),
+                  createdAt: z.date(),
+                  team: z.object({
+                    id: z.uuid(),
+                    name: z.string()
+                  }),
+                  user: z.object({
+                    id: z.uuid(),
+                    name: z.string(),
+                    email: z.email()
+                  })
                 })
               )
-              .describe("Gives an array of teams")
+              .describe("Gives an array of tasks")
           }),
           404: z
             .object({
@@ -38,6 +51,10 @@ export const getTasksRoute = async (
               code: z.any().optional()
             })
             .describe("Returned when an unexpected server error occurs")
+        },
+        querystring: {
+          status: z.enum(["pending", "in_progress", "completed"]),
+          priority: z.enum(["high", "medium", "low"])
         }
       }
     },

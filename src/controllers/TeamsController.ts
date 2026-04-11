@@ -63,7 +63,6 @@ export class TeamsController {
   ) => {
     try {
       const { team_id } = request.params;
-      console.log(team_id);
 
       if (!team_id) {
         return reply.status(400).send({ message: "Team was not found" });
