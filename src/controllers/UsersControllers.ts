@@ -9,7 +9,7 @@ export class UsersController {
     this.#model = new UserModel();
   }
 
-  index = async (request: FastifyRequest, reply: FastifyReply) => {
+  index = async (_: FastifyRequest, reply: FastifyReply) => {
     try {
       const users = await this.#model.index();
       return reply.send({ message: "Users is ok", users: users });

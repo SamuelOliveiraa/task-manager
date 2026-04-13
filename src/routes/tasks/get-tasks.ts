@@ -52,10 +52,10 @@ export const getTasksRoute = async (
             })
             .describe("Returned when an unexpected server error occurs")
         },
-        querystring: {
+        querystring: z.object({
           status: z.enum(["pending", "in_progress", "completed"]),
           priority: z.enum(["high", "medium", "low"])
-        }
+        })
       }
     },
     controller.index

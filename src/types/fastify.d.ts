@@ -1,3 +1,4 @@
+import type { Role } from "@/generated/prisma/enums.ts";
 import { FastifyRequest } from "fastify";
 
 declare module "fastify" {
@@ -6,6 +7,7 @@ declare module "fastify" {
       id: string;
       name: string;
       email: string;
+      role: Role
       updatedAt: Date;
       createdAt: Date;
       emailVerified: boolean;

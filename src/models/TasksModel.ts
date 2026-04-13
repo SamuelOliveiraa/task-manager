@@ -39,6 +39,44 @@ export class TasksModel {
     return tasks
   }
 
+  async show(user_id: string, priority?: Priority, status?: Status){
+    const tasks = await prisma.tasks.findMany({
+      where: {
+        ...(priority ? {priority} : {}),
+        ...(status ? {status} : {}),
+        assigned_to: user_id
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        priority: true,
+        status: true,
+        createdAt: true,
+        team: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'asc'
+      }
+    });
+
+    if (tasks.length === 0) return [];
+
+    return tasks
+  }
+
   // async create(name: string, description?: string) {
   //   const team = await prisma.teams.create({
   //     data: { name, description: description ?? null }
@@ -52,7 +90,7 @@ export class TasksModel {
   async delete(task_id: string) {
     const taskDeleted = await prisma.tasks.delete({
       where: {
-        id: task_id
+        id: task_id,
       }
     })
 

@@ -7,7 +7,7 @@ export const deleteTaskRoute = async (
   controller: TasksController
 ) => {
   app.delete(
-    "/:task_id",
+    "/:user_id/:task_id",
     {
       schema: {
         tags: ["task"],
@@ -32,6 +32,7 @@ export const deleteTaskRoute = async (
             .describe("Returned when an unexpected server error occurs")
         },
         params: z.object({
+          user_id: z.string(),
           task_id: z.uuid()
         })
       }
